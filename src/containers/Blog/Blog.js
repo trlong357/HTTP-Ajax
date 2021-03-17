@@ -8,6 +8,7 @@ import "./Blog.css";
 class Blog extends Component {
   state = {
     posts: [],
+    selectedPostId: null,
   };
 
   componentDidMount() {
@@ -20,20 +21,32 @@ class Blog extends Component {
         };
       });
       this.setState({ posts: updatedPosts });
-      // console.log(response);
+      // console.log(responpmnse);
     }); //GET request{}
     //then is a method which takes a function as the input and this func will get executed once the promise resolves
     // this.setState({post: response.data})
   }
+
+  postSelectedHandler = (id) => {
+    this.setState({ selectedPostId: id });
+  };
+
   render() {
     const posts = this.state.posts.map((post) => {
-      return <Post key={post.id} title={post.title} author={post.author} />;
+      return (
+        <Post
+          clicked={() => this.postSelectedHandler(post.id)}
+          key={post.id}
+          title={post.title}
+          author={post.author}
+        />
+      );
     });
     return (
       <div>
         <section className="Posts">{posts}</section>
         <section>
-          <FullPost />
+          <FullPost id={this.state.selectedPostId} />
         </section>
         <section>
           <NewPost />
