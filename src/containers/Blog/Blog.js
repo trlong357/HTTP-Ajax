@@ -9,22 +9,28 @@ class Blog extends Component {
   state = {
     posts: [],
     selectedPostId: null,
+    error: false,
   };
 
   componentDidMount() {
-    axios.get("https://jsonplaceholder.typicode.com/posts").then((response) => {
-      const posts = response.data.slice(0, 4);
-      const updatedPosts = posts.map((post) => {
-        return {
-          ...post,
-          author: "Tony",
-        };
-      });
-      this.setState({ posts: updatedPosts });
-      // console.log(responpmnse);
-    }); //GET request{}
-    //then is a method which takes a function as the input and this func will get executed once the promise resolves
-    // this.setState({post: response.data})
+    axios
+      .get("https://jsonplaceholder.typicode.com/postsssss")
+      .then((response) => {
+        const posts = response.data.slice(0, 4);
+        const updatedPosts = posts.map((post) => {
+          return {
+            ...post,
+            author: "Tony",
+          };
+        });
+        this.setState({ posts: updatedPosts });
+        // console.log(responpmnse);
+      }) //GET request{}
+      //then is a method which takes a function as the input and this func will get executed once the promise resolves
+      // this.setState({post: response.data})
+      .catch((error) => {
+        this.setState({ error: true });
+      }); //CATCH: catch error
   }
 
   postSelectedHandler = (id) => {
@@ -32,25 +38,32 @@ class Blog extends Component {
   };
 
   render() {
-    const posts = this.state.posts.map((post) => {
+    if (!this.state.error) {
+      const posts = this.state.posts.map((post) => {
+        return (
+          <Post
+            clicked={() => this.postSelectedHandler(post.id)}
+            key={post.id}
+            title={post.title}
+            author={post.author}
+          />
+        );
+      });
       return (
-        <Post
-          clicked={() => this.postSelectedHandler(post.id)}
-          key={post.id}
-          title={post.title}
-          author={post.author}
-        />
+        <div>
+          <section className="Posts">{posts}</section>
+          <section>
+            <FullPost id={this.state.selectedPostId} />
+          </section>
+          <section>
+            <NewPost />
+          </section>
+        </div>
       );
-    });
+    }
     return (
       <div>
-        <section className="Posts">{posts}</section>
-        <section>
-          <FullPost id={this.state.selectedPostId} />
-        </section>
-        <section>
-          <NewPost />
-        </section>
+        <h1>Something went wrong!!!</h1>
       </div>
     );
   }
