@@ -5,7 +5,21 @@ import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import axios from "axios";
 
-const requestInterceptor = axios.interceptors.request.use(
+axios.defaults.baseURL = "https://jsonplaceholder.typicode.com/";
+axios.defaults.headers.common["Authorization"] = "AUTH TOKEN";
+axios.defaults.headers.post["Content-Type"] = "application/json";
+// const requestInterceptor = axios.interceptors.request.use(
+//   (request) => {
+//     console.log(request);
+//     //return request to revent blocking it
+//     return request;
+//   },
+//   (error) => {
+//     console.log(error);
+//     return Promise.reject(error);
+//   }
+// );
+axios.interceptors.request.use(
   (request) => {
     console.log(request);
     //return request to revent blocking it
@@ -16,8 +30,17 @@ const requestInterceptor = axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-const resInterceptor = axios.interceptors.response.use(
+// const resInterceptor = axios.interceptors.response.use(
+//   (response) => {
+//     console.log(response);
+//     return response;
+//   },
+//   (error) => {
+//     console.log(error);
+//     return Promise.reject(error);
+//   }
+// );
+axios.interceptors.response.use(
   (response) => {
     console.log(response);
     return response;
@@ -28,8 +51,8 @@ const resInterceptor = axios.interceptors.response.use(
   }
 );
 
-axios.interceptors.request.eject(resInterceptor);
-axios.interceptors.request.eject(requestInterceptor);
+// axios.interceptors.request.eject(resInterceptor);
+// axios.interceptors.request.eject(requestInterceptor);
 
 ReactDOM.render(<App />, document.getElementById("root"));
 registerServiceWorker();
